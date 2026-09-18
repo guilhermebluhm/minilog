@@ -1,5 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
+use crate::enums::EventTransaction::EventTransaction;
+use crate::enums::TypeLogTransaction::TypeLogTransaction;
 use crate::Models::Transaction::Transaction;
 
 pub struct Terminal{
@@ -14,7 +16,8 @@ pub struct AuditService{
 }
 
 pub trait EventListener{
-    fn on_transaction(&mut self, tx: &Transaction);
+    fn on_transaction(&mut self, tx: &Transaction) -> EventTransaction;
+    fn type_operation(&self) -> TypeLogTransaction;
 }
 
 impl Terminal{

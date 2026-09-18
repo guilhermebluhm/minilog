@@ -1,3 +1,5 @@
+use crate::enums::EventTransaction::EventTransaction;
+use crate::enums::TypeLogTransaction::TypeLogTransaction;
 use crate::Models::Aggregator::EventListener;
 use crate::Models::Transaction::Transaction;
 
@@ -7,17 +9,21 @@ pub struct FraudDetector{
 }
 
 impl EventListener for FraudDetector{
-    fn on_transaction(&mut self, tx: &Transaction){
+    fn on_transaction(&mut self, tx: &Transaction) -> EventTransaction {
         
         if tx.amount > 5000.00 {
             self.fraud_count += 1;
-            println!("ALERTA: Fraude detectada!")
+            return EventTransaction::Blocked
         }
         
         if self.fraud_count.eq(&0){
             println!("Transação normal");
         }
-        
+        EventTransaction::Continue
+    }
+
+    fn type_operation(&self) -> TypeLogTransaction {
+        TypeLogTransaction::FRAUD
     }
 }
 

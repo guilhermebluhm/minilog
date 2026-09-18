@@ -1,3 +1,5 @@
+use crate::enums::EventTransaction::EventTransaction;
+use crate::enums::TypeLogTransaction::TypeLogTransaction;
 use crate::Models::Aggregator::EventListener;
 use crate::Models::Transaction::Transaction;
 
@@ -8,11 +10,15 @@ pub struct MetricsTracker {
 }
 
 impl EventListener for MetricsTracker {
-    fn on_transaction(&mut self, tx: &Transaction) {
+    fn on_transaction(&mut self, tx: &Transaction) -> EventTransaction {
         self.total_volume += tx.amount;
         self.total_count += 1;
-        
         println!("volume processado: {} - (Total: {})", tx.amount, self.total_count);
+        EventTransaction::Continue
+    }
+
+    fn type_operation(&self) -> TypeLogTransaction {
+        TypeLogTransaction::METRICS
     }
 }
 

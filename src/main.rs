@@ -32,6 +32,12 @@ fn main() -> Result<(), AppError> {
     registry_event(1, ref_aud.clone())?;
     terminal.service.borrow_mut().subscribe_transaction(*transaction_2.clone());
     registry_event(2, ref_aud.clone())?;
+    
+    println!();
+    
+    for i in &ref_aud.borrow().history{
+        println!("{:#?}", i);
+    }
 
     Ok(())
 
