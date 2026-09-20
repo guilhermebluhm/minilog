@@ -13,6 +13,7 @@ impl EventListener for FraudDetector{
         
         if tx.amount > 5000.00 {
             self.fraud_count += 1;
+            println!("Transação suspeita");
             return EventTransaction::Blocked
         }
         

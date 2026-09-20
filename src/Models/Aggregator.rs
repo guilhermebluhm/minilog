@@ -1,7 +1,11 @@
 use std::cell::RefCell;
+use std::collections::{HashMap, HashSet};
+use std::fmt;
+use std::fmt::Formatter;
 use std::rc::Rc;
 use crate::enums::EventTransaction::EventTransaction;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
+use crate::Models::FraudControl::FraudControl;
 use crate::Models::Transaction::Transaction;
 
 pub struct Terminal{
@@ -12,7 +16,8 @@ pub struct Terminal{
 #[derive(Clone)]
 pub struct AuditService{
     pub history: Vec<Transaction>,
-    pub listeners: Vec<Rc<RefCell<dyn EventListener>>>
+    pub listeners: Vec<Rc<RefCell<dyn EventListener>>>,
+    pub fraud_history: Rc<RefCell<HashSet<FraudControl>>>
 }
 
 pub trait EventListener{
@@ -25,12 +30,11 @@ impl Terminal{
         Self{id, service: service.clone()}
     }
 
-    pub fn process_payment(&self, tx_id: u32, amount: f64, flagged: bool) -> Box<Transaction>{
-        let transc = Transaction::new(tx_id, amount, flagged);
+    pub fn process_payment(&self, tx_id: u32, amount: f64) -> Box<Transaction>{
+        let transc = Transaction::new(tx_id, amount);
         println!("Processando a transação: {:#?}", transc);
         Box::new(transc)
     }
-
 }
 
 impl AuditService{
@@ -38,6 +42,7 @@ impl AuditService{
         Self{
             history: vec![],
             listeners: vec![],
+            fraud_history: Rc::new(RefCell::new(HashSet::new()))
         }
     }
 

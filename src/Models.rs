@@ -3,3 +3,4 @@ pub mod FraudDetector;
 pub mod MetricsTracker;
 pub mod Aggregator;
 pub mod EventBus;
+pub mod FraudControl;
