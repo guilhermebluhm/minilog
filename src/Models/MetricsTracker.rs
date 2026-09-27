@@ -10,15 +10,11 @@ pub struct MetricsTracker {
 }
 
 impl EventListener for MetricsTracker {
-    fn on_transaction(&mut self, tx: &Transaction) -> EventTransaction {
+    fn on_transaction(&mut self, tx: &mut Transaction) -> (TypeLogTransaction, EventTransaction) {
         self.total_volume += tx.amount;
         self.total_count += 1;
-        println!("volume processado: {} - (Total: {})", tx.amount, self.total_count);
-        EventTransaction::Continue
-    }
-
-    fn type_operation(&self) -> TypeLogTransaction {
-        TypeLogTransaction::METRICS
+        println!("volume processado: {} - (Total: {})", self.total_volume, self.total_count);
+        (TypeLogTransaction::METRICS, EventTransaction::Continue)
     }
 }
 

@@ -1,5 +1,6 @@
 #[derive(Debug, PartialOrd, PartialEq)]
 pub enum TypeLogTransaction{
     FRAUD,
-    METRICS
+    METRICS,
+    ACCOUNT_LIMIT
 }

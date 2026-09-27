@@ -1,7 +1,5 @@
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
-use std::fmt;
-use std::fmt::Formatter;
 use std::rc::Rc;
 use crate::enums::EventTransaction::EventTransaction;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
@@ -21,8 +19,7 @@ pub struct AuditService{
 }
 
 pub trait EventListener{
-    fn on_transaction(&mut self, tx: &Transaction) -> EventTransaction;
-    fn type_operation(&self) -> TypeLogTransaction;
+    fn on_transaction(&mut self, tx: &mut Transaction) -> (TypeLogTransaction, EventTransaction);
 }
 
 impl Terminal{
@@ -30,8 +27,8 @@ impl Terminal{
         Self{id, service: service.clone()}
     }
 
-    pub fn process_payment(&self, tx_id: u32, amount: f64) -> Box<Transaction>{
-        let transc = Transaction::new(tx_id, amount);
+    pub fn process_payment(&self, tx_id: u32, amount: f64, account_id: u32) -> Box<Transaction>{
+        let transc = Transaction::new(tx_id, amount, account_id);
         println!("Processando a transação: {:#?}", transc);
         Box::new(transc)
     }
