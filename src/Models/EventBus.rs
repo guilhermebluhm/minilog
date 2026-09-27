@@ -20,9 +20,15 @@ pub fn registry_event(audit: Rc<RefCell<AuditService>>) -> Result<(), AppError> 
     for i in list_transaction.iter_mut() {
         for j in audit.borrow_mut().listeners.iter() {
             let transaction = j.borrow_mut().on_transaction(i);
+
             if transaction.1 == EventTransaction::Blocked{
                 fraud_control.insert(FraudControl::new(i.id));
             }
+            //account limit
+            if transaction.0 == TypeLogTransaction::ACCOUNT_LIMIT && transaction.1 == EventTransaction::Blocked{
+                break
+            }
+            //fraud detector
             if transaction.0 == TypeLogTransaction::FRAUD && transaction.1 == EventTransaction::Blocked{
                 break
             }

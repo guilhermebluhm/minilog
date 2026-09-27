@@ -2,6 +2,7 @@ use std::cell::RefCell;
 use std::error::Error;
 use std::rc::Rc;
 use crate::enums::AppError::AppError;
+use crate::enums::ClientTier::ClientTier;
 use crate::Models::AccountLimitDetector::AccountLimitDetector;
 use crate::Models::Aggregator::{AuditService, EventListener, Terminal};
 use crate::Models::EventBus::registry_event;
@@ -20,18 +21,23 @@ fn main() -> Result<(), AppError> {
     let account_limit_metrics:  Rc<RefCell<AccountLimitDetector>> = Rc::new(RefCell::new(AccountLimitDetector::new()));
     let terminal = Terminal::new(1, &ref_aud);
 
-    let transaction_1 = terminal.process_payment(1, 2000.00,5122);
-    let transaction_2 = terminal.process_payment(2, 90.00,662);
+    let transaction_1 = terminal.process_payment(1, 2000.00,5122, ClientTier::BASIC);
+    let transaction_2 = terminal.process_payment(2, 2990.00,5122, ClientTier::BASIC);
 
+    terminal.service.try_borrow_mut()
+        .map_err(|e| AppError::RuntimeError(e.to_string()))?
+        .subscribe_listener(account_limit_metrics.clone());
     terminal.service.try_borrow_mut()
         .map_err(|e| AppError::RuntimeError(e.to_string()))?
         .subscribe_listener(fraud_transaction.clone());
     terminal.service.try_borrow_mut()
         .map_err(|e| AppError::RuntimeError(e.to_string()))?
         .subscribe_listener(metrics_transaction.clone());
-    terminal.service.try_borrow_mut()
-        .map_err(|e| AppError::RuntimeError(e.to_string()))?
-        .subscribe_listener(account_limit_metrics.clone());
+    /*
+    velocity detector vai aqui para detectar a recorrencia das transações
+    se a mesma conta fizer $N$ transações consecutivas com valores exatamente iguais
+    a lista de recorrencia das transações e para ser lida pelo que e montado pelo accountlimitdetector
+    */
 
     terminal.service.borrow_mut()
         .subscribe_transaction(*transaction_1.clone());

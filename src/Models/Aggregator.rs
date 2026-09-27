@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 use std::rc::Rc;
+use crate::enums::ClientTier::ClientTier;
 use crate::enums::EventTransaction::EventTransaction;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
 use crate::Models::FraudControl::FraudControl;
@@ -27,8 +28,8 @@ impl Terminal{
         Self{id, service: service.clone()}
     }
 
-    pub fn process_payment(&self, tx_id: u32, amount: f64, account_id: u32) -> Box<Transaction>{
-        let transc = Transaction::new(tx_id, amount, account_id);
+    pub fn process_payment(&self, tx_id: u32, amount: f64, account_id: u32, tier: ClientTier) -> Box<Transaction>{
+        let transc = Transaction::new(tx_id, amount, account_id, tier);
         println!("Processando a transação: {:#?}", transc);
         Box::new(transc)
     }

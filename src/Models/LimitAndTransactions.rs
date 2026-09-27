@@ -1,7 +1,14 @@
 use crate::Models::Transaction::Transaction;
 
+#[derive(Debug)]
 pub struct LimitAndTransaction{
     pub transactions: Vec<Transaction>,
-    pub global_limit_for_client: f64
 }
 
+impl LimitAndTransaction{
+    pub fn new() -> Self{
+        Self{
+            transactions: vec![],
+        }
+    }
+}

@@ -18,13 +18,13 @@ impl EventListener for FraudDetector{
 
         if list_accountid_black_list().iter().copied().find(|c| c.eq(&tx.account_id)).is_some(){
             self.fraud_count+=1;
-            tx.add_rejection(RejectReason{id: tx.rejection_reasons.len(), reason: format!("Transação bloqueada ligada a conta suspeita - {}", tx.amount)});
+            tx.add_rejection(RejectReason{id: tx.rejection_reasons.len()+1, reason: format!("Transação bloqueada ligada a conta suspeita - {}", tx.amount)});
             return (TypeLogTransaction::FRAUD, EventTransaction::Blocked)
         }
 
         if self.internal_transaction.borrow().is_empty() && tx.amount > 5000.00{
             self.fraud_count+=1;
-            tx.add_rejection(RejectReason{id: tx.rejection_reasons.len(), reason: format!("Transação bloqueada por valor suspeito - {}", tx.amount)});
+            tx.add_rejection(RejectReason{id: tx.rejection_reasons.len()+1, reason: format!("Transação bloqueada por valor suspeito - {}", tx.amount)});
             return (TypeLogTransaction::FRAUD, EventTransaction::Blocked)
         }
         else{
@@ -37,7 +37,7 @@ impl EventListener for FraudDetector{
             if sum != 0.00{
                 if tx.amount >= (sum * 2.00) {
                     self.fraud_count+=1;
-                    tx.add_rejection(RejectReason{id: tx.rejection_reasons.len(), reason: format!("Transação bloqueada por valor suspeito fora do padrão - {}", tx.amount)});
+                    tx.add_rejection(RejectReason{id: tx.rejection_reasons.len()+1, reason: format!("Transação bloqueada por valor suspeito fora do padrão - {}", tx.amount)});
                     return (TypeLogTransaction::FRAUD, EventTransaction::Blocked)
                 }
             }
