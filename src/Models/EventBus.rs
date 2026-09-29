@@ -11,7 +11,6 @@ use crate::Models::Transaction::Transaction;
 pub fn registry_event(audit: Rc<RefCell<AuditService>>) -> Result<(), AppError> {
 
     let mut list_transaction:Vec<Transaction> = Vec::with_capacity(audit.borrow().history.len());
-    let mut fraud_control:HashSet<FraudControl> = HashSet::new();
 
     for i in audit.borrow().history.iter(){
         list_transaction.push(i.clone());
@@ -19,27 +18,24 @@ pub fn registry_event(audit: Rc<RefCell<AuditService>>) -> Result<(), AppError> 
 
     for i in list_transaction.iter_mut() {
         for j in audit.borrow_mut().listeners.iter() {
+
             let transaction = j.borrow_mut().on_transaction(i);
 
-            if transaction.1 == EventTransaction::Blocked{
-                fraud_control.insert(FraudControl::new(i.id));
-            }
             //account limit
             if transaction.0 == TypeLogTransaction::ACCOUNT_LIMIT && transaction.1 == EventTransaction::Blocked{
-                break
+                continue;
             }
             //transaction recurrency
             if transaction.0 == TypeLogTransaction::RECURRENCY_LIMIT && transaction.1 == EventTransaction::Blocked{
-                break
+                continue;
             }
             //fraud detector
             if transaction.0 == TypeLogTransaction::FRAUD && transaction.1 == EventTransaction::Blocked{
-                break
+                continue;
             }
         }
     }
 
-    audit.borrow_mut().fraud_history = Rc::new(RefCell::new(fraud_control));
     Ok(())
 
 }

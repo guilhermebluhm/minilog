@@ -1,5 +1,4 @@
 use std::cell::{Ref, RefCell, RefMut};
-use std::collections::HashMap;
 use crate::enums::EventTransaction::EventTransaction;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
 use crate::Models::Aggregator::EventListener;
@@ -70,9 +69,5 @@ impl EventListener for TransactionRecurrency{
         }
         self.insert_new_record().push((tx.account_id, tx.amount as u32));
         (TypeLogTransaction::RECURRENCY_LIMIT, EventTransaction::Continue)
-
-        //por que ao definir um tipo de retorno para o meu contrato de implementacao quando
-        //recebo uma struct por parametro perco acesso a seus atributos publicos ?
-
     }
 }

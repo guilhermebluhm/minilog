@@ -55,7 +55,6 @@ fn main() -> Result<(), AppError> {
         .subscribe_transaction(*transaction_5.clone());
 
     let _ = registry_event(terminal.service.clone());
-    println!("{:?}", terminal.service.borrow().fraud_history.clone());
     Ok(())
 
 }

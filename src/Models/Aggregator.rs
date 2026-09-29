@@ -16,7 +16,6 @@ pub struct Terminal{
 pub struct AuditService{
     pub history: Vec<Transaction>,
     pub listeners: Vec<Rc<RefCell<dyn EventListener>>>,
-    pub fraud_history: Rc<RefCell<HashSet<FraudControl>>>
 }
 
 pub trait EventListener{
@@ -40,7 +39,6 @@ impl AuditService{
         Self{
             history: vec![],
             listeners: vec![],
-            fraud_history: Rc::new(RefCell::new(HashSet::new()))
         }
     }
 
