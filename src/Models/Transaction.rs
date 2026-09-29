@@ -13,7 +13,7 @@ pub struct Transaction {
 impl Transaction {
     pub fn new(id: u32, amount: f64, account_id: u32, tier: ClientTier) -> Transaction {
         Self{
-            id, amount, account_id, rejection_reasons: vec![], client_tier: ClientTier::BASIC
+            id, amount, account_id, rejection_reasons: vec![], client_tier: tier
         }
     }
 

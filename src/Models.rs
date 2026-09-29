@@ -7,3 +7,4 @@ pub mod FraudControl;
 pub mod RejectReason;
 pub mod AccountLimitDetector;
 pub mod LimitAndTransactions;
+pub mod TransactionRecurrency;

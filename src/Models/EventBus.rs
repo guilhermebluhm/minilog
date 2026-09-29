@@ -28,6 +28,10 @@ pub fn registry_event(audit: Rc<RefCell<AuditService>>) -> Result<(), AppError> 
             if transaction.0 == TypeLogTransaction::ACCOUNT_LIMIT && transaction.1 == EventTransaction::Blocked{
                 break
             }
+            //transaction recurrency
+            if transaction.0 == TypeLogTransaction::RECURRENCY_LIMIT && transaction.1 == EventTransaction::Blocked{
+                break
+            }
             //fraud detector
             if transaction.0 == TypeLogTransaction::FRAUD && transaction.1 == EventTransaction::Blocked{
                 break

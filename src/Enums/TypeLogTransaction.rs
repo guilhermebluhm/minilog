@@ -2,5 +2,6 @@
 pub enum TypeLogTransaction{
     FRAUD,
     METRICS,
-    ACCOUNT_LIMIT
+    ACCOUNT_LIMIT,
+    RECURRENCY_LIMIT
 }

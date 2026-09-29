@@ -11,6 +11,8 @@ use crate::Models::Transaction::Transaction;
 pub struct FraudDetector{
     pub fraud_count: usize,
     pub internal_transaction: Rc<RefCell<HashSet<u32>>>
+    //precisa vincular a conta para nao produzir falso-positivo
+    //por acumulo de transacoes. entao requer ser hashmap (internal_transaction)
 }
 
 impl EventListener for FraudDetector{
