@@ -1,17 +1,19 @@
+use crate::Models::Aggregator::{AuditService, EventListener, Terminal};
+use crate::enums::AppError::AppError;
+use crate::enums::ClientTier::ClientTier;
+use event::EventBus::registry_event;
+use listeners::AccountLimitDetector::AccountLimitDetector;
+use listeners::FraudDetector::FraudDetector;
+use listeners::MetricsTracker::MetricsTracker;
+use listeners::TransactionRecurrency::TransactionRecurrency;
 use std::cell::RefCell;
 use std::error::Error;
 use std::rc::Rc;
-use crate::enums::AppError::AppError;
-use crate::enums::ClientTier::ClientTier;
-use crate::Models::AccountLimitDetector::AccountLimitDetector;
-use crate::Models::Aggregator::{AuditService, EventListener, Terminal};
-use crate::Models::EventBus::registry_event;
-use crate::Models::FraudDetector::FraudDetector;
-use crate::Models::MetricsTracker::MetricsTracker;
-use crate::Models::TransactionRecurrency::TransactionRecurrency;
 
-pub mod Models;
+mod Models;
 mod enums;
+mod listeners;
+mod event;
 
 fn main() -> Result<(), AppError> {
     

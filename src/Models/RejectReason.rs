@@ -1,4 +1,3 @@
-use crate::enums::EventTransaction::EventTransaction;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
 
 #[derive(Debug, Clone)]

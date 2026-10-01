@@ -1,6 +1,3 @@
-use std::fmt;
-use std::fmt::{write, Formatter};
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct FraudControl(u32);
 

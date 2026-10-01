@@ -1,15 +1,13 @@
-use std::cell::RefCell;
-use std::collections::{HashMap, HashSet};
-use std::rc::Rc;
+use crate::Models::Transaction::Transaction;
 use crate::enums::ClientTier::ClientTier;
 use crate::enums::EventTransaction::EventTransaction;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
-use crate::Models::FraudControl::FraudControl;
-use crate::Models::Transaction::Transaction;
+use std::cell::RefCell;
+use std::rc::Rc;
 
-pub struct Terminal{
+pub struct Terminal {
     pub id: u32,
-    pub service: Rc<RefCell<AuditService>>
+    pub service: Rc<RefCell<AuditService>>,
 }
 
 #[derive(Clone)]
