@@ -51,3 +51,14 @@ impl AuditService{
     }
 
 }
+
+impl AuditService{
+    pub fn get_account_statement(&self, accountid: u32) -> () {
+        println!("Histórico de transações da conta");
+        for i in self.history.iter().filter(|x| x.account_id == accountid){
+            for i in i.rejection_reasons.iter(){
+                println!("{:#?}", i);
+            }
+        }
+    }
+}

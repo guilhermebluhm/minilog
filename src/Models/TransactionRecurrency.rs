@@ -61,7 +61,8 @@ impl EventListener for TransactionRecurrency{
                     println!("transações recorrentes suspeitas para a conta: {}. número de iterações: {}", tx.account_id, ret);
                     tx.add_rejection(RejectReason{
                         id: tx.rejection_reasons.len()+1, 
-                        reason: format!("transações recorrentes suspeitas para a conta: {}. número de iterações: {}", tx.account_id, ret)});
+                        reason: format!("transações recorrentes suspeitas para a conta: {}. número de iterações: {}", tx.account_id, ret),
+                        type_reject: TypeLogTransaction::RECURRENCY_LIMIT});
                         return (TypeLogTransaction::RECURRENCY_LIMIT, EventTransaction::Blocked)
                 }
             }

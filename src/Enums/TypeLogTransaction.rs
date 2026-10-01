@@ -1,4 +1,4 @@
-#[derive(Debug, PartialOrd, PartialEq)]
+#[derive(Clone, Debug, PartialOrd, PartialEq)]
 pub enum TypeLogTransaction{
     FRAUD,
     METRICS,

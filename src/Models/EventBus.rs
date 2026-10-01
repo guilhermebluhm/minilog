@@ -1,15 +1,12 @@
-use std::cell::RefCell;
-use std::collections::{HashMap, HashSet};
-use std::rc::Rc;
+use crate::Models::Aggregator::AuditService;
+use crate::Models::Transaction::Transaction;
 use crate::enums::AppError::AppError;
 use crate::enums::EventTransaction::EventTransaction;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
-use crate::Models::Aggregator::{AuditService};
-use crate::Models::FraudControl::FraudControl;
-use crate::Models::Transaction::Transaction;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 pub fn registry_event(audit: Rc<RefCell<AuditService>>) -> Result<(), AppError> {
-
     let mut list_transaction:Vec<Transaction> = Vec::with_capacity(audit.borrow().history.len());
 
     for i in audit.borrow().history.iter(){
@@ -36,6 +33,7 @@ pub fn registry_event(audit: Rc<RefCell<AuditService>>) -> Result<(), AppError> 
         }
     }
 
+    audit.borrow_mut().history = list_transaction;
     Ok(())
 
 }

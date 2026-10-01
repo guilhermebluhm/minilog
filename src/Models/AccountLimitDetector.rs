@@ -47,7 +47,9 @@ impl EventListener for AccountLimitDetector{
             match tx.client_tier {
                 ClientTier::BASIC => {
                     if (self.update_limit_values(tx.account_id) + tx.amount) > 3000.00 {
-                        tx.rejection_reasons.push(RejectReason{id: tx.rejection_reasons.len()+1,reason: "Limite estourado".to_string()});
+                        tx.rejection_reasons.push(RejectReason{id: tx.rejection_reasons.len()+1,
+                            reason: "Limite estourado".to_string(),
+                            type_reject: TypeLogTransaction::ACCOUNT_LIMIT});
                         println!("{:#?}", tx); //detalhar a transação que levou ao bloqueio do fluxo (provisorio desta forma)
                         return (TypeLogTransaction::ACCOUNT_LIMIT, EventTransaction::Blocked)
                     }
