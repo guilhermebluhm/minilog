@@ -16,9 +16,6 @@ pub fn registry_event(audit: Rc<RefCell<AuditService>>) -> Result<(), AppError> 
 
     for i in list_transaction.iter_mut() {
         for j in audit.borrow_mut().listeners.iter() {
-
-
-
             let trans = j.borrow_mut().on_transaction(i);
             match trans.1 {
                 EventTransaction::Blocked(severity) => {

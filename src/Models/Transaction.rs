@@ -1,6 +1,8 @@
-use serde::Serialize;
-use crate::enums::ClientTier::ClientTier;
+use serde::de::Unexpected::Str;
 use crate::Models::RejectReason::RejectReason;
+use crate::enums::ClientTier::ClientTier;
+use serde::Serialize;
+use crate::Models::CreateBy::CreateBy;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Transaction {
@@ -8,13 +10,14 @@ pub struct Transaction {
     pub amount: f64,
     pub account_id: u32, //identificador do numero da conta
     pub rejection_reasons: Vec<RejectReason>, //lista de razoes para rejeicao
-    pub client_tier: ClientTier
+    pub client_tier: ClientTier,
+    pub created_by: CreateBy,
 }
 
 impl Transaction {
     pub fn new(id: u32, amount: f64, account_id: u32, tier: ClientTier) -> Transaction {
         Self{
-            id, amount, account_id, rejection_reasons: vec![], client_tier: tier
+            id, amount, account_id, rejection_reasons: vec![], client_tier: tier, created_by: CreateBy::new()
         }
     }
 
