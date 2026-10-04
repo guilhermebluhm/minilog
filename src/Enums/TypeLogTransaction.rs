@@ -1,4 +1,6 @@
-#[derive(Clone, Debug, PartialOrd, PartialEq)]
+use serde::Serialize;
+
+#[derive(Clone, Debug, PartialOrd, PartialEq, Serialize)]
 pub enum TypeLogTransaction{
     FRAUD,
     METRICS,

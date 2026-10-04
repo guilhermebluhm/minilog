@@ -1,10 +1,13 @@
+use serde::Serialize;
+use crate::enums::SeverityLevel::SeverityLevel;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct RejectReason {
     pub id: usize,
     pub reason: String,
-    pub type_reject: TypeLogTransaction
+    pub type_reject: TypeLogTransaction,
+    pub severity: SeverityLevel,
 }
 
 trait Helpers{

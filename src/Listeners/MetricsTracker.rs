@@ -1,4 +1,5 @@
 use crate::enums::EventTransaction::EventTransaction;
+use crate::enums::SeverityLevel::SeverityLevel;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
 use crate::Models::Aggregator::EventListener;
 use crate::Models::Transaction::Transaction;
@@ -14,7 +15,7 @@ impl EventListener for MetricsTracker {
         self.total_volume += tx.amount;
         self.total_count += 1;
         println!("volume processado: {} - (Total: {})", self.total_volume, self.total_count);
-        (TypeLogTransaction::METRICS, EventTransaction::Continue)
+        (TypeLogTransaction::METRICS, EventTransaction::Continue(SeverityLevel::INFORMATIVE))
     }
 }
 

@@ -1,5 +1,7 @@
+use crate::enums::SeverityLevel::SeverityLevel;
+
 #[derive(Debug, PartialOrd, PartialEq)]
 pub enum EventTransaction{
-    Continue,
-    Blocked,
+    Continue(SeverityLevel),
+    Blocked(SeverityLevel),
 }

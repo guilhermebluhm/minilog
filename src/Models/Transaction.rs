@@ -1,7 +1,8 @@
+use serde::Serialize;
 use crate::enums::ClientTier::ClientTier;
 use crate::Models::RejectReason::RejectReason;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Transaction {
     pub id: u32,
     pub amount: f64,

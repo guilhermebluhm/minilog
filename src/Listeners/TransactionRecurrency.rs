@@ -1,5 +1,6 @@
 use std::cell::{Ref, RefCell, RefMut};
 use crate::enums::EventTransaction::EventTransaction;
+use crate::enums::SeverityLevel::SeverityLevel;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
 use crate::Models::Aggregator::EventListener;
 use crate::Models::RejectReason::RejectReason;
@@ -55,20 +56,21 @@ impl EventListener for TransactionRecurrency{
 
             match ret { 
                 0..=2 => {
-                    return (TypeLogTransaction::RECURRENCY_LIMIT, EventTransaction::Continue)
+                    return (TypeLogTransaction::RECURRENCY_LIMIT, EventTransaction::Continue(SeverityLevel::OK))
                 }
                 _ => {
                     println!("transações recorrentes suspeitas para a conta: {}. número de iterações: {}", tx.account_id, ret);
                     tx.add_rejection(RejectReason{
                         id: tx.rejection_reasons.len()+1, 
                         reason: format!("transações recorrentes suspeitas para a conta: {}. número de iterações: {}", tx.account_id, ret),
-                        type_reject: TypeLogTransaction::RECURRENCY_LIMIT});
-                        return (TypeLogTransaction::RECURRENCY_LIMIT, EventTransaction::Blocked)
+                        type_reject: TypeLogTransaction::RECURRENCY_LIMIT,
+                        severity: SeverityLevel::WARNING});
+                        return (TypeLogTransaction::RECURRENCY_LIMIT, EventTransaction::Blocked(SeverityLevel::WARNING))
                 }
             }
 
         }
         self.insert_new_record().push((tx.account_id, tx.amount as u32));
-        (TypeLogTransaction::RECURRENCY_LIMIT, EventTransaction::Continue)
+        (TypeLogTransaction::RECURRENCY_LIMIT, EventTransaction::Continue(SeverityLevel::OK))
     }
 }

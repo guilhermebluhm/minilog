@@ -2,6 +2,7 @@ use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 use std::rc::Rc;
 use crate::enums::EventTransaction::EventTransaction;
+use crate::enums::SeverityLevel::SeverityLevel;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
 use crate::Models::Aggregator::EventListener;
 use crate::Models::RejectReason::RejectReason;
@@ -23,16 +24,18 @@ impl EventListener for FraudDetector{
             self.internal_transaction.borrow_mut().insert(tx.account_id, tx.amount as u32);
             tx.add_rejection(RejectReason{id: tx.rejection_reasons.len()+1,
                 reason: format!("Transação bloqueada ligada a conta suspeita - {}", tx.amount,),
-                type_reject: TypeLogTransaction::FRAUD});
-            return (TypeLogTransaction::FRAUD, EventTransaction::Blocked)
+                type_reject: TypeLogTransaction::FRAUD,
+                severity: SeverityLevel::WARNING});
+            return (TypeLogTransaction::FRAUD, EventTransaction::Blocked(SeverityLevel::WARNING))
         }
         else if self.internal_transaction.borrow().is_empty() && tx.amount > 5000.00{
             self.fraud_count+=1;
             self.internal_transaction.borrow_mut().insert(tx.account_id, tx.amount as u32);
             tx.add_rejection(RejectReason{id: tx.rejection_reasons.len()+1,
                 reason: format!("Transação bloqueada por valor suspeito - {}", tx.amount),
-                type_reject: TypeLogTransaction::FRAUD});
-            return (TypeLogTransaction::FRAUD, EventTransaction::Blocked)
+                type_reject: TypeLogTransaction::FRAUD,
+                severity: SeverityLevel::WARNING});
+            return (TypeLogTransaction::FRAUD, EventTransaction::Blocked(SeverityLevel::WARNING))
         }
         else if !self.internal_transaction.borrow().is_empty() && self.internal_transaction.borrow().get(&tx.account_id).is_some(){
             let mut sum = 0.00;
@@ -47,14 +50,15 @@ impl EventListener for FraudDetector{
                     self.internal_transaction.borrow_mut().insert(tx.account_id, tx.amount as u32);
                     tx.add_rejection(RejectReason{id: tx.rejection_reasons.len()+1,
                         reason: format!("Transação bloqueada por valor suspeito fora do padrão - {}", sum + tx.amount),
-                        type_reject: TypeLogTransaction::FRAUD});
-                    return (TypeLogTransaction::FRAUD, EventTransaction::Blocked)
+                        type_reject: TypeLogTransaction::FRAUD,
+                        severity: SeverityLevel::WARNING});
+                    return (TypeLogTransaction::FRAUD, EventTransaction::Blocked(SeverityLevel::WARNING))
                 }
             }
         }
         self.internal_transaction.borrow_mut().insert(tx.account_id, tx.amount as u32);
         println!("Transação normal");
-        (TypeLogTransaction::FRAUD, EventTransaction::Continue)
+        (TypeLogTransaction::FRAUD, EventTransaction::Continue(SeverityLevel::OK))
     }
 }
 

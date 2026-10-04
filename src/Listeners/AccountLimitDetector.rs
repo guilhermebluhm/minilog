@@ -2,6 +2,7 @@ use std::cell::{Ref, RefCell, RefMut};
 use std::collections::HashMap;
 use crate::enums::ClientTier::ClientTier;
 use crate::enums::EventTransaction::EventTransaction;
+use crate::enums::SeverityLevel::SeverityLevel;
 use crate::enums::TypeLogTransaction::TypeLogTransaction;
 use crate::Models::Aggregator::EventListener;
 use crate::Models::LimitAndTransactions::LimitAndTransaction;
@@ -49,9 +50,9 @@ impl EventListener for AccountLimitDetector{
                     if (self.update_limit_values(tx.account_id) + tx.amount) > 3000.00 {
                         tx.rejection_reasons.push(RejectReason{id: tx.rejection_reasons.len()+1,
                             reason: "Limite estourado".to_string(),
-                            type_reject: TypeLogTransaction::ACCOUNT_LIMIT});
-                        println!("{:#?}", tx); //detalhar a transação que levou ao bloqueio do fluxo (provisorio desta forma)
-                        return (TypeLogTransaction::ACCOUNT_LIMIT, EventTransaction::Blocked)
+                            type_reject: TypeLogTransaction::ACCOUNT_LIMIT,
+                            severity: SeverityLevel::ERROR});
+                        return (TypeLogTransaction::ACCOUNT_LIMIT, EventTransaction::Blocked(SeverityLevel::ERROR))
                     }
                 }
                 _ => {}
@@ -65,6 +66,6 @@ impl EventListener for AccountLimitDetector{
             self.get_limit_mutable().insert(tx.account_id, history_transaction);
         }
 
-        (TypeLogTransaction::ACCOUNT_LIMIT, EventTransaction::Continue)
+        (TypeLogTransaction::ACCOUNT_LIMIT, EventTransaction::Continue(SeverityLevel::OK))
     }
 }
