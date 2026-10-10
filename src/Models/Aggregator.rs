@@ -59,4 +59,9 @@ impl AuditService{
             }
         }
     }
+    
+    pub fn get_mut_instance_transaction(&mut self, id_transaction: u32) -> Box<&mut Transaction>{
+        Box::new(self.history.iter_mut().find(|x| x.id == id_transaction).unwrap())
+    }
+    
 }

@@ -3,3 +3,4 @@ pub mod TypeLogTransaction;
 pub mod EventTransaction;
 pub mod ClientTier;
 pub mod SeverityLevel;
+pub mod LogLevel;
