@@ -6,4 +6,4 @@ pub enum SeverityLevel{
     INFORMATIVE,
     OK,
     ERROR
-} //precisa remover o severity leval após
+}

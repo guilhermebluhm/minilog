@@ -4,6 +4,7 @@ use crate::enums::AppError::AppError;
 use crate::logger::LoggerCore::LoggerLogic;
 use std::cell::RefCell;
 use std::rc::Rc;
+use crate::event::AlertNotification::generate_notification;
 
 pub fn registry_event(audit: Rc<RefCell<AuditService>>) -> Result<(), AppError> {
     let mut list_transaction: Vec<Box<dyn LoggerLogic>> = Vec::with_capacity(audit.borrow().history.len());
@@ -14,6 +15,8 @@ pub fn registry_event(audit: Rc<RefCell<AuditService>>) -> Result<(), AppError> 
     }
 
     avaliable_branch_status(&mut list_transaction);
+    generate_notification(&list_transaction);
+
     for i in list_transaction.iter_mut() {
         let mut t = audit.borrow_mut().get_mut_instance_transaction(i.transaction_id()).as_mut().clone();
 
